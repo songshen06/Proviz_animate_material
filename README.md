@@ -4,6 +4,8 @@
 
 The Shader Animation Extension is a custom Omniverse plugin designed to apply and manage texture-based animation sequences on shader inputs. It provides an easy-to-use UI for configuring animation parameters, such as shader path, texture input, animation folder, and frame duration.
 
+![Watch the video](https://github.com/songshen06/Proviz_animate_material/blob/master/animate_texture.mp4)
+
 ## Features
 
 ### Run Animation
