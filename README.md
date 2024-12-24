@@ -1,52 +1,178 @@
-# Extension Project Template
+# Shader Animation Extension Documentation
 
-This project was automatically generated.
+## Overview
 
-- `app` - It is a folder link to the location of your *Omniverse Kit* based app.
-- `exts` - It is a folder where you can add new extensions. It was automatically added to extension search path. (Extension Manager -> Gear Icon -> Extension Search Path).
+The Shader Animation Extension is a custom Omniverse plugin designed to apply and manage texture-based animation sequences on shader inputs. It provides an easy-to-use UI for configuring animation parameters, such as shader path, texture input, animation folder, and frame duration.
 
-Open this folder using Visual Studio Code. It will suggest you to install few extensions that will make python experience better.
+## Features
 
-Look for "proviz.animate.material" extension in extension manager and enable it. Try applying changes to any python files, it will hot-reload and you can observe results immediately.
+### Run Animation
 
-Alternatively, you can launch your app from console with this folder added to search path and your extension enabled, e.g.:
+- Allows the user to specify a shader path and apply a texture sequence as an animation.
+- Supports custom frame durations for each texture.
+- Automatically adjusts the USD timeline based on the provided configuration.
 
-```
-> app\omni.code.bat --ext-folder exts --enable company.hello.world
-```
+### Clear Animation
 
-# App Link Setup
+- Removes the animation configuration from the shader input.
+- Resets the timeline to default values.
 
-If `app` folder link doesn't exist or broken it can be created again. For better developer experience it is recommended to create a folder link named `app` to the *Omniverse Kit* app installed from *Omniverse Launcher*. Convenience script to use is included.
+### Clear Inputs
 
-Run:
+- Resets all UI fields to their default values.
 
-```
-> link_app.bat
-```
+## User Interface
 
-If successful you should see `app` folder link in the root of this repo.
+### Inputs
 
-If multiple Omniverse apps is installed script will select recommended one. Or you can explicitly pass an app:
+#### Shader Path
 
-```
-> link_app.bat --app create
-```
+- Specify the USD path of the shader where the animation will be applied.
+- Example: `/World/Looks/Shader1`.
 
-You can also just pass a path to create link to:
+#### Texture Input
 
-```
-> link_app.bat --path "C:/Users/bob/AppData/Local/ov/pkg/create-2021.3.4"
-```
+- Specify the shader's texture input to which the animation will be applied.
+- Example: `opacity_texture`.
 
+#### Animation Folder Path
 
-# Sharing Your Extensions
+- Specify the folder containing the texture files to use for the animation.
+- Only `.jpg` and `.png` formats are supported.
 
-This folder is ready to be pushed to any git repository. Once pushed direct link to a git repository can be added to *Omniverse Kit* extension search paths.
+#### Start Time Code
 
-Link might look like this: `git://github.com/[user]/[your_repo].git?branch=main&dir=exts`
+- Set the time code where the animation begins.
+- Example: `0`.
 
-Notice `exts` is repo subfolder with extensions. More information can be found in "Git URL as Extension Search Paths" section of developers manual.
+#### Frame Duration
 
-To add a link to your *Omniverse Kit* based app go into: Extension Manager -> Gear Icon -> Extension Search Path
+- Define how many frames each texture will be displayed.
+- Example: `2` (each texture will last for 2 frames).
 
+### Buttons
+
+#### Run Animation
+
+- Applies the texture sequence as an animation to the specified shader.
+- Dynamically calculates the timeline's end based on the number of textures and frame duration.
+
+#### Clear Animation
+
+- Removes the texture sequence animation and resets the timeline.
+
+#### Clear Inputs
+
+- Resets all fields in the UI to their default values.
+
+## Workflow
+
+1. Open the extension.
+2. Fill in the required fields:
+   - **Shader Path**: Enter the path to the shader.
+   - **Texture Input**: Specify the shader input name (e.g., `opacity_texture`).
+   - **Animation Folder Path**: Provide the folder containing texture sequence files.
+   - **Start Time Code**: Set the animation's starting time code.
+   - **Frame Duration**: Specify the number of frames each texture will last.
+3. Click **Run Animation** to apply the animation.
+4. To remove the animation, click **Clear Animation**.
+5. Use **Clear Inputs** to reset the form for a new configuration.
+
+## Error Handling
+
+### Invalid Shader Path
+
+- Ensure the specified shader path exists in the USD stage.
+- Error Message: `Shader not found at path: <path>`.
+
+### Invalid Texture Input
+
+- Ensure the specified texture input exists on the shader.
+- Error Message: `Input '<texture_input>' not found in shader`.
+
+### Empty or Missing Animation Folder
+
+- Ensure the folder contains valid `.jpg` or `.png` files.
+- Error Message: `No valid images found in the provided folder`.
+
+### Frame Duration Error
+
+- Ensure frame duration is greater than `0`.
+- Error Message: `Frame duration must be greater than 0`.
+
+## Development Details
+
+### Code Structure
+
+The plugin is modularized into the following components:
+
+#### UI Module
+
+- Handles the creation of user interface elements and captures user inputs.
+
+#### Animation Logic Module
+
+- Contains methods for applying and clearing animations.
+- Includes helper functions for file validation and timeline adjustments.
+
+#### Main Extension
+
+- Manages the plugin's lifecycle and bridges the UI with the animation logic.
+
+### Key Functions
+
+#### UI Module
+
+- `get_inputs()`: Retrieves user input values from the UI fields.
+- `clear_inputs()`: Resets all input fields to default values.
+
+#### Animation Logic Module
+
+- `start_animation()`:
+  - Applies the texture sequence animation to the specified shader input.
+  - Adjusts the timeline dynamically based on textures and frame duration.
+- `clear_animation()`:
+  - Removes the animation configuration and resets the timeline.
+- `_get_valid_files()`:
+  - Filters valid texture files (`.jpg`, `.png`) from the provided folder.
+
+#### Main Extension
+
+- `_run_animation()`: Retrieves user inputs and triggers the animation logic.
+- `_clear_animation()`: Clears the animation using the animation logic.
+- `_clear_inputs()`: Resets the UI fields.
+
+## Extensibility
+
+### To add support for more texture formats:
+
+- Update the `_get_valid_files()` method in `ShaderAnimationLogic`.
+
+### To enhance UI capabilities:
+
+- Add new input fields or dropdowns in the `ShaderAnimationUI` class.
+
+## Example
+
+### Configuration
+
+- **Shader Path**: `/World/Looks/MyShader`
+- **Texture Input**: `diffuse_texture`
+- **Animation Folder Path**: `/path/to/textures`
+- **Start Time Code**: `0`
+- **Frame Duration**: `2`
+
+### Result
+
+- Each texture from the folder is applied for 2 frames.
+- Timeline is adjusted to fit all textures.
+
+## Future Improvements
+
+- **Preview Mode**: Add functionality to preview animations before applying.
+- **Batch Processing**: Enable applying animations to multiple shaders simultaneously.
+- **Enhanced Error Reporting**: Provide detailed error messages and suggestions for resolving issues.
+
+## Conclusion
+
+This plugin simplifies the process of applying texture-based animations to shaders in Omniverse. Its modular design ensures ease of maintenance and scalability for future enhancements.
