@@ -1,180 +1,117 @@
-# Shader Animation Extension Documentation
+## Shader Animation Setup - User Interface Guide
 
-## Overview
+This section covers the interface elements available in the shader animation plugin. It allows users to configure various settings for the rendering and animation process.
 
-The Shader Animation Extension is a custom Omniverse plugin designed to apply and manage texture-based animation sequences on shader inputs. It provides an easy-to-use UI for configuring animation parameters, such as shader path, texture input, animation folder, and frame duration.
+### 1. Render Resolution
 
-![Watch the video](https://github.com/songshen06/Proviz_animate_material/blob/master/animate_texture.mp4)
+- **Description**: This section defines the resolution of the rendered images.
+- **Inputs**:
+  - **Width**: The width of the rendered image (default is 3840).
+  - **Height**: The height of the rendered image (default is 2160).
 
-## Features
+---
 
-### Run Animation
+### 2. Shader Path
 
-- Allows the user to specify a shader path and apply a texture sequence as an animation.
-- Supports custom frame durations for each texture.
-- Automatically adjusts the USD timeline based on the provided configuration.
+- **Description**: Specifies the path to the shader you want to apply to the texture.
+- **Input**: Enter the shader path (e.g., `/World/Looks/MyShader`).
 
-### Clear Animation
+---
 
-- Removes the animation configuration from the shader input.
-- Resets the timeline to default values.
+### 3. Animation Folder Path
 
-### Clear Inputs
+- **Description**: Path to the folder containing the animation textures.
+- **Input**: Enter the folder path where the animation textures are stored.
 
-- Resets all UI fields to their default values.
+---
 
-## User Interface
+### 4. Start Time Code
 
-### Inputs
+- **Description**: Specifies the time code at which the animation should begin.
+- **Input**: Enter the start time code (default is 0).
 
-#### Shader Path
+---
 
-- Specify the USD path of the shader where the animation will be applied.
-- Example: `/World/Looks/Shader1`.
+### 5. Frame Duration
 
-#### Texture Input
+- **Description**: Defines the number of frames each texture will be displayed before transitioning to the next texture in the sequence.
+- **Input**: Enter the frame duration (default is 6).
 
-- Specify the shader's texture input to which the animation will be applied.
-- Example: `opacity_texture`.
+---
 
-#### Animation Folder Path
+### 6. Wait Time Between Textures
 
-- Specify the folder containing the texture files to use for the animation.
-- Only `.jpg` and `.png` formats are supported.
+- **Description**: Sets the wait time in seconds between each texture frame during the animation.
+- **Input**: Enter the wait time (default is 0.5 seconds).
 
-#### Start Time Code
+---
 
-- Set the time code where the animation begins.
-- Example: `0`.
+### 7. Output Directory
 
-#### Frame Duration
+- **Description**: Specifies the directory where rendered images will be saved.
+- **Input**: Enter the output directory path (default is `/path/to/output`).
 
-- Define how many frames each texture will be displayed.
-- Example: `2` (each texture will last for 2 frames).
+---
 
-### Buttons
+### 8. Output File Name Prefix
 
-#### Run Animation
+- **Description**: Defines the prefix to be used for the output image file names.
+- **Input**: Enter the prefix (default is `frame`).
 
-- Applies the texture sequence as an animation to the specified shader.
-- Dynamically calculates the timeline's end based on the number of textures and frame duration.
+---
 
-#### Clear Animation
+### 9. Select Texture Type
 
-- Removes the texture sequence animation and resets the timeline.
+- **Description**: Choose the texture type to be applied to the shader.
+- **Options**:
+  - **Opacity Texture**: Select for opacity textures.
+  - **Diffuse Texture**: Select for diffuse textures.
 
-#### Clear Inputs
+---
 
-- Resets all fields in the UI to their default values.
+### 10. Buttons
 
-## Workflow
+The following buttons control the core functionality of the plugin:
 
-1. Open the extension.
-2. Fill in the required fields:
-   - **Shader Path**: Enter the path to the shader.
-   - **Texture Input**: Specify the shader input name (e.g., `opacity_texture`).
-   - **Animation Folder Path**: Provide the folder containing texture sequence files.
-   - **Start Time Code**: Set the animation's starting time code.
-   - **Frame Duration**: Specify the number of frames each texture will last.
-3. Click **Run Animation** to apply the animation.
-4. To remove the animation, click **Clear Animation**.
-5. Use **Clear Inputs** to reset the form for a new configuration.
+#### 10.1 **Run Animation**
 
-## Error Handling
+- **Description**: Starts the animation rendering process.
+- **Action**: Click the `Run Animation` button to begin the rendering of the textures in sequence. The frame duration and wait time between textures will dictate the pace of the animation.
 
-### Invalid Shader Path
+#### 10.2 **Clear Animation**
 
-- Ensure the specified shader path exists in the USD stage.
-- Error Message: `Shader not found at path: <path>`.
+- **Description**: Clears the current animation settings and resets the texture configuration.
+- **Action**: Click the `Clear Animation` button to reset the animation settings and start fresh.
 
-### Invalid Texture Input
+#### 10.3 **Terminate**
 
-- Ensure the specified texture input exists on the shader.
-- Error Message: `Input '<texture_input>' not found in shader`.
+- **Description**: Terminates the ongoing rendering or animation process.
+- **Action**: Click the `Terminate` button to immediately stop the current animation rendering.
 
-### Empty or Missing Animation Folder
+#### 10.4 **Clear Inputs**
 
-- Ensure the folder contains valid `.jpg` or `.png` files.
-- Error Message: `No valid images found in the provided folder`.
+- **Description**: Clears all the input fields, allowing you to reset the configuration.
+- **Action**: Click the `Clear Inputs` button to reset all settings to their default values.
 
-### Frame Duration Error
+---
 
-- Ensure frame duration is greater than `0`.
-- Error Message: `Frame duration must be greater than 0`.
+### Example Usage Flow
 
-## Development Details
+1. **Set Input Parameters**
 
-### Code Structure
+   - Define your render resolution, shader path, animation folder, and other settings in the fields.
 
-The plugin is modularized into the following components:
+2. **Run Animation**
 
-#### UI Module
+   - Once the settings are configured, click the `Run Animation` button to start rendering the textures based on the animation setup.
 
-- Handles the creation of user interface elements and captures user inputs.
+3. **Clear Animation**
 
-#### Animation Logic Module
+   - To clear the current animation and settings, click the `Clear Animation` button.
 
-- Contains methods for applying and clearing animations.
-- Includes helper functions for file validation and timeline adjustments.
+4. **Terminate**
 
-#### Main Extension
+   - To stop the ongoing rendering or animation process at any time, click the `Terminate` button.
 
-- Manages the plugin's lifecycle and bridges the UI with the animation logic.
-
-### Key Functions
-
-#### UI Module
-
-- `get_inputs()`: Retrieves user input values from the UI fields.
-- `clear_inputs()`: Resets all input fields to default values.
-
-#### Animation Logic Module
-
-- `start_animation()`:
-  - Applies the texture sequence animation to the specified shader input.
-  - Adjusts the timeline dynamically based on textures and frame duration.
-- `clear_animation()`:
-  - Removes the animation configuration and resets the timeline.
-- `_get_valid_files()`:
-  - Filters valid texture files (`.jpg`, `.png`) from the provided folder.
-
-#### Main Extension
-
-- `_run_animation()`: Retrieves user inputs and triggers the animation logic.
-- `_clear_animation()`: Clears the animation using the animation logic.
-- `_clear_inputs()`: Resets the UI fields.
-
-## Extensibility
-
-### To add support for more texture formats:
-
-- Update the `_get_valid_files()` method in `ShaderAnimationLogic`.
-
-### To enhance UI capabilities:
-
-- Add new input fields or dropdowns in the `ShaderAnimationUI` class.
-
-## Example
-
-### Configuration
-
-- **Shader Path**: `/World/Looks/MyShader`
-- **Texture Input**: `diffuse_texture`
-- **Animation Folder Path**: `/path/to/textures`
-- **Start Time Code**: `0`
-- **Frame Duration**: `2`
-
-### Result
-
-- Each texture from the folder is applied for 2 frames.
-- Timeline is adjusted to fit all textures.
-
-## Future Improvements
-
-- **Preview Mode**: Add functionality to preview animations before applying.
-- **Batch Processing**: Enable applying animations to multiple shaders simultaneously.
-- **Enhanced Error Reporting**: Provide detailed error messages and suggestions for resolving issues.
-
-## Conclusion
-
-This plugin simplifies the process of applying texture-based animations to shaders in Omniverse. Its modular design ensures ease of maintenance and scalability for future enhancements.
+5. **Clear Inputs**
+   - To reset all input fields to their default values, click the `Clear Inputs` button.
